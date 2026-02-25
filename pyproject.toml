@@ -1,0 +1,7 @@
+[project]
+name = "svg2gakko"
+version = "0.1.0"
+description = "Tool for conversion svg images to Gakko's JSON test format"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = []
