@@ -1,6 +1,4 @@
-def main():
-    print("Hello from svg2gakko!")
+from pathlib import Path
+from svg2gakko.parser import svg2base64gakko
 
-
-if __name__ == "__main__":
-    main()
+print(svg2base64gakko(Path("data/example.svg")))
