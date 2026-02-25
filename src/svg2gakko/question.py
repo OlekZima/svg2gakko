@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from answer import Answer
+from svg2gakko.answer import Answer
 from enum import Enum
 
 
@@ -15,6 +15,16 @@ class Question:
     question_type: QuestionType
     number_of_options: int
     answers: list[Answer]
+    points: int = 1
+
+    def to_dict(self):
+        return {
+            "Content": self.content,
+            "NumberOfOptions": self.number_of_options,
+            "QuestionType": self.question_type.value,
+            "Points": self.points,
+            "Answers": [answer.to_dict() for answer in self.answers],
+        }
 
     # def __init__(
     #     self,
