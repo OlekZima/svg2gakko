@@ -4,6 +4,17 @@ class Svg2GakkoError(Exception):
     pass
 
 
+class InputDirectoryDoesntExistError(Svg2GakkoError):
+    """Raised when passed input directory to the CLI doesn't exist or None"""
+
+    pass
+
+class InputDirectoryIsNotDirectoryError(Svg2GakkoError):
+    """Raised when passed input directory to the CLI is not directory"""
+
+    pass
+
+
 class NotAtLeastTwoAnswersError(Svg2GakkoError):
     """Raised when MULTIPLE/SINGLE_CHOISE_QUESTION has less than 2 answers."""
 

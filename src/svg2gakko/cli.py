@@ -1,3 +1,4 @@
+from svg2gakko.errors import InputDirectoryDoesntExistError, InputDirectoryIsNotDirectoryError
 import argparse
 from pathlib import Path
 from rich import print
@@ -21,7 +22,13 @@ def _parse_args() -> argparse.Namespace:
 
 
 def main() -> None:
-    for item in Path(_parse_args().input).iterdir():
+    arguments = _parse_args()
+    if arguments.input is None or not Path(arguments.input).exists():
+        raise InputDirectoryDoesntExistError("Input directory doesn't exist or None.")
+    if not Path(arguments.input).is_dir():
+        raise InputDirectoryIsNotDirectoryError("Input directory is not a directory.")
+
+    for item in Path(arguments.input).iterdir():
         for image in Path(item).iterdir():
             if image.name.split(sep=".")[-1] != "svg":
                 print(f"[bold red][SKIP][/bold red] Found non SVG file: {image}\n")
