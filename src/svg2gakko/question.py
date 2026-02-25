@@ -1,4 +1,8 @@
-from cairocffi import Error
+from svg2gakko.errors import (
+    NotAtLeastTwoAnswersError,
+    NotAtLeastOneCorrectAnswersError,
+    NotAllAnswerCorrectError,
+)
 from dataclasses import dataclass
 from enum import Enum
 
@@ -34,14 +38,18 @@ class Question:
     def validate(self):
         if self.question_type.value in (0, 1):
             if len(self.answers) < 2:
-                raise ValueError("For MULTIPLE/SINGLE_CHOICE_QUESTION you need at least 2 answers.")
-            if not any(answer.correct for answer in self.answers):
-                raise ValueError(
-                    "For MULTIPLE/SINGLE_CHOICE_QUESTION at least one answer should be correct."
+                raise NotAtLeastTwoAnswersError(
+                    "For MULTIPLE/SINGLE_CHOICE_QUESTION you need at least 2 answers."
                 )
-
-        if not all(answer.correct for answer in self.answers):
-            raise ValueError("For TEXT_QUESTION all of the answers should be correct.")
+            if not any(answer.correct for answer in self.answers):
+                raise NotAtLeastOneCorrectAnswersError(
+                    "For MULTIPLE/SINGLE_CHOICE_QUESTION at least 1 answer should be correct."
+                )
+        else:
+            if not all(answer.correct for answer in self.answers):
+                raise NotAllAnswerCorrectError(
+                    "For TEXT_QUESTION all of the answers should be correct."
+                )
 
     def to_dict(self):
         self.validate()
