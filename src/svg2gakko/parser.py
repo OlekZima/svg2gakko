@@ -64,9 +64,7 @@ def _jpeg2base64gakko(file: Path) -> str:
 
 def svg2base64gakko(file: Path) -> str:
     """Convert SVG image to Base64 HTML `<img>` tag that Gakko accepts.
-    At the end of the `<img>` `<br>` tag is added.
-
-    By default Gakko inserts `<img>` tag into `<p>` tag, so output of this function should be placed into `<p>` tag with some content
+    At the end of the `<img>` tag `<br>` tag is added.
 
     Args:
         file (Path): Path to the JPEG image
