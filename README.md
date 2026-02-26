@@ -9,7 +9,8 @@
 
 1. Download `uv` package manager from [astral.sh](https://docs.astral.sh/uv/getting-started/installation/)
 2. Download the repo `git clone https://github.com/OlekZima/svg2gakko/tree/main`
-3. Install `svg2gakko` package in editable mode by `uv pip install -e .`
+3. Create a venv and download packages by `uv sync`
+4. Install `svg2gakko` package in editable mode by `uv pip install -e .`
 
 ### Usage
 
