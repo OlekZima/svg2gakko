@@ -12,7 +12,7 @@
 
 Run the CLI tool:
 
-```bash
+```txt
 usage: svg2gakko [-h] [-i INPUT] [-o OUTPUT] input output
 
 Tool for conversion svg images to Gakko's JSON test format
@@ -25,7 +25,6 @@ options:
   -h, --help           show this help message and exit
   -i, --input INPUT    Directory which will contain other directories (categories of questions) with SVG files.
   -o, --output OUTPUT  Output JSON file path.
-
 ```
 
 - `-i, --input`: Path to the directory containing question categories (each as a subdirectory with SVG files).
