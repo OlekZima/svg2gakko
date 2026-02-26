@@ -31,6 +31,12 @@
 
 5. Install `svg2gakko` package in editable mode by `uv pip install -e .`
 
+Alternatively, you can run it directly:
+
+```bash
+uv run main.py input output
+```
+
 ### Usage
 
 Run the CLI tool:

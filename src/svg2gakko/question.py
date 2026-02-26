@@ -16,7 +16,7 @@ class QuestionType(Enum):
     TEXT_QUESTION = 2
 
 
-@dataclass
+@dataclass(frozen=True)
 class Answer:
     content: str
     correct: bool
@@ -30,7 +30,7 @@ class Answer:
         }
 
 
-@dataclass
+@dataclass(frozen=True)
 class Question:
     content: str
     question_type: QuestionType
