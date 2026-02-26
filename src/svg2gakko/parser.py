@@ -47,9 +47,7 @@ def _jpeg2base64gakko(file: Path) -> str:
     # By default Gakko inserts <img> tag into <p> tag, so this should be placed into <p> tag with some content
     with open(file, "rb") as jpeg_image:
         base64_bytes = str(base64.b64encode(jpeg_image.read()), "utf-8")
-        return (
-            f'<img style="width: {image_width}px" src="data:image/jpeg;base64,{base64_bytes}"><br>'
-        )
+        return f'<img style="width: {image_width}px" src="data:image/jpeg;base64,{base64_bytes}"><br>'
 
 
 # def svg2base64gakko(file: Path) -> str:
