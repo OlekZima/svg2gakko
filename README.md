@@ -10,7 +10,26 @@
 1. Download `uv` package manager from [astral.sh](https://docs.astral.sh/uv/getting-started/installation/)
 2. Download the repo `git clone https://github.com/OlekZima/svg2gakko/tree/main`
 3. Create a venv and download packages by `uv sync`
-4. Install `svg2gakko` package in editable mode by `uv pip install -e .`
+4. Activate the environmet:
+   - For Windows `cmd.exe`
+
+    ```bash
+    .venv\Scripts\activate.bat
+    ```
+
+   - For Windows PowerShell
+
+    ```bash
+    .venv\Scripts\activate.ps1
+    ```
+
+   - For Linux/MacOS
+
+    ```bash
+    source .venv/bin/activate
+    ```
+
+5. Install `svg2gakko` package in editable mode by `uv pip install -e .`
 
 ### Usage
 
