@@ -41,11 +41,15 @@ As the `output`, provide a path to the JSON file that will be created (if it doe
 
 `svg2gakko` as well as Gakko expects each question to consist of at least three files:
 
-1. A question file (e.g. `1.svg`), which is used as the question content.
-2. Answer files named in the format `QuestionNumber_AnswerNumber.svg`.
+- Question file.
+- 2 answers files.
+
+### Note
+
+1. A question file (e.g. `1.svg`), will be used as the question content.
+2. Answer files should named in the format `QuestionNumber_AnswerNumber.svg`.
     Each question must have at least two answers, unless its `QuestionType` is `TEXT_QUESTION`.
-3. At least one answer must be incorrect, unless the `QuestionType` is `TEXT_QUESTION`.
-4. Answer contents must be unique.
+3. Contents of answers must be unique.
 
 ### Example file structure #1
 
