@@ -4,6 +4,7 @@ from svg2gakko.errors import (
     NotAtLeastOneCorrectAnswersError,
     NotAllAnswerCorrectError,
     NotAtLeastThreeNumberOfOptions,
+    AnswersAreNotUnique,
 )
 from dataclasses import dataclass, field
 from enum import Enum
@@ -42,6 +43,10 @@ class Question:
             raise NotAtLeastThreeNumberOfOptions(
                 "Questions should have at least 3 number of options."
             )
+
+        if len(set(self._answers)) != len(self._answers):
+            raise AnswersAreNotUnique("Some of the answers got non-unique content.")
+
         if self.question_type.value in (0, 1):
             if len(self._answers) < 2:
                 raise NotAtLeastTwoAnswersError(

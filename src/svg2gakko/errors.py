@@ -38,3 +38,9 @@ class NotAtLeastThreeNumberOfOptions(Svg2GakkoError):
     """Raised when number_of_options in Question is less than 3."""
 
     pass
+
+
+class AnswersAreNotUnique(Svg2GakkoError):
+    """Raised when there are non-unique answers."""
+
+    pass
