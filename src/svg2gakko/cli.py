@@ -1,8 +1,13 @@
-from svg2gakko.errors import InputDirectoryDoesntExistError, InputDirectoryIsNotDirectoryError
+from svg2gakko.json_builder import JSONBuilder
+from svg2gakko.processor import CategoryProcessor
+from svg2gakko.scanner import CategoryScanner
+from svg2gakko.builder import Builder
+from svg2gakko.errors import (
+    InputDirectoryDoesntExistError,
+    InputDirectoryIsNotDirectoryError,
+)
 import argparse
 from pathlib import Path
-from rich import print
-from svg2gakko.parser import svg2base64gakko
 
 
 def _parse_args() -> argparse.Namespace:
@@ -12,26 +17,48 @@ def _parse_args() -> argparse.Namespace:
     )
 
     parser.add_argument(
+        "input",
+        help="Directory which will contain other directories (categories of questions) with SVG files.",
+        type=str,
+    )
+
+    parser.add_argument(
+        "output",
+        help="Output JSON file path.",
+        type=str,
+    )
+
+    parser.add_argument(
         "-i",
         "--input",
-        required=True,
         help="Directory which will contain other directories (categories of questions) with SVG files.",
+        type=str,
+    )
+
+    parser.add_argument(
+        "-o",
+        "--output",
+        help="Output JSON file path.",
         type=str,
     )
     return parser.parse_args()
 
 
-def main() -> None:
-    arguments = _parse_args()
-    if arguments.input is None or not Path(arguments.input).exists():
+def _check_input(input_path: str) -> bool:
+    if input_path is None or not Path(input_path).exists():
         raise InputDirectoryDoesntExistError("Input directory doesn't exist or None.")
-    if not Path(arguments.input).is_dir():
+    if not Path(input_path).is_dir():
         raise InputDirectoryIsNotDirectoryError("Input directory is not a directory.")
 
-    for item in Path(arguments.input).iterdir():
-        for image in Path(item).iterdir():
-            if image.name.split(sep=".")[-1] != "svg":
-                print(f"[bold red][SKIP][/bold red] Found non SVG file: {image}\n")
-            print(
-                f"[bold green][CONVERT][/bold green] Found an SVG file {image}: {svg2base64gakko(image)}\n"
-            )
+    return True
+
+
+def main() -> None:
+    args = _parse_args()
+    _check_input(args.input)
+
+    Builder(
+        CategoryScanner(),
+        CategoryProcessor(),
+        JSONBuilder(),
+    ).build(args.input, args.output)

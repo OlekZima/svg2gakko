@@ -1,4 +1,3 @@
-from pathlib import Path
-from svg2gakko.parser import svg2base64gakko
+from svg2gakko.cli import main
 
-print(svg2base64gakko(Path("data/example.svg")))
+main()
