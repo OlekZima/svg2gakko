@@ -1,9 +1,11 @@
+from typing import Iterable
 from svg2gakko.errors import (
     NotAtLeastTwoAnswersError,
     NotAtLeastOneCorrectAnswersError,
     NotAllAnswerCorrectError,
+    NotAtLeastThreeNumberOfOptions,
 )
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 
 
@@ -31,32 +33,46 @@ class Answer:
 class Question:
     content: str
     question_type: QuestionType
-    number_of_options: int
-    answers: list[Answer]
+    _answers: list[Answer] = field(default_factory=list)
+    number_of_options: int = 3
     points: int = 1
 
-    def validate(self):
+    def is_correct(self) -> bool:
+        if self.number_of_options < 3:
+            raise NotAtLeastThreeNumberOfOptions(
+                "Questions should have at least 3 number of options."
+            )
         if self.question_type.value in (0, 1):
-            if len(self.answers) < 2:
+            if len(self._answers) < 2:
                 raise NotAtLeastTwoAnswersError(
-                    "For MULTIPLE/SINGLE_CHOICE_QUESTION you need at least 2 answers."
+                    f"For MULTIPLE/SINGLE_CHOICE_QUESTION you need at least 2 answers.\n{self}"
                 )
-            if not any(answer.correct for answer in self.answers):
+            if not any(answer.correct for answer in self._answers):
                 raise NotAtLeastOneCorrectAnswersError(
-                    "For MULTIPLE/SINGLE_CHOICE_QUESTION at least 1 answer should be correct."
+                    f"For MULTIPLE/SINGLE_CHOICE_QUESTION at least 1 answer should be correct.\n{self}"
                 )
         else:
-            if not all(answer.correct for answer in self.answers):
+            if not all(answer.correct for answer in self._answers):
                 raise NotAllAnswerCorrectError(
-                    "For TEXT_QUESTION all of the answers should be correct."
+                    f"For TEXT_QUESTION all of the answers should be correct.\n{self}"
                 )
+        return True
+
+    def add_answer(self, answer: Answer) -> None:
+        self._answers.append(answer)
+
+    def add_answers(self, answers: Iterable[Answer]) -> None:
+        self._answers.extend(answers)
+
+    def get_answers_len(self) -> int:
+        return len(self._answers)
 
     def to_dict(self):
-        self.validate()
-        return {
-            "Content": self.content,
-            "NumberOfOptions": self.number_of_options,
-            "QuestionType": self.question_type.value,
-            "Points": self.points,
-            "Answers": [answer.to_dict() for answer in self.answers],
-        }
+        if self.is_correct():
+            return {
+                "Content": self.content,
+                "NumberOfOptions": self.number_of_options,
+                "QuestionType": self.question_type.value,
+                "Points": self.points,
+                "Answers": [answer.to_dict() for answer in self._answers],
+            }
