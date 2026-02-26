@@ -1,6 +1,9 @@
-# svg2gakko
+# svg2gakko [Work In Progress]
 
 ## Convert your SVG images into Gakko Test JSON format
+
+> [!CAUTION]
+> At the moment all answers are *correct* by default and all questions are `SINGLE_CHOICE_QUESTION` type.
 
 ### Installation
 

@@ -17,15 +17,21 @@ class CategoryProcessor:
             question_path = qa_dict[number]["question"][0]
             answers_paths = qa_dict[number]["answers"]
 
-            print(
-                f"[bold green][Question][/bold green] Parsing question: {question_path}"
-            )
+            print(f"[bold green][Question][/bold green] Parsing question: {question_path}")
             question = Question(
                 content=svg2base64gakko(question_path),
+                # TODO How do we read QuestionType from the file?
                 question_type=QuestionType.SINGLE_CHOICE_QUESTION,
             )
 
-            answers = [Answer(svg2base64gakko(file), True) for file in answers_paths]
+            answers = [
+                Answer(
+                    svg2base64gakko(file),
+                    # TODO How do we check if answer is correct?
+                    True,
+                )
+                for file in answers_paths
+            ]
             question.add_answers(answers)
             questions.append(question)
 
