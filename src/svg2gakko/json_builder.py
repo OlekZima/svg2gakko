@@ -14,7 +14,7 @@ class JSONBuilder:
     def dump(self, file: Path | str):
         path_file = Path(file)
         if not path_file.exists():
-            path_file.touch
+            path_file.touch()
 
         with open(file, "w", encoding="utf-8") as f:
             json.dump(self._questions, f, indent=4)

@@ -23,7 +23,7 @@ class NotAtLeastTwoAnswersError(Svg2GakkoError):
 
 
 class NotAtLeastOneCorrectAnswersError(Svg2GakkoError):
-    """Raised when MULTIPLE/SINGLE_CHOISE_QUESTION hasn't at least 1 correct answers."""
+    """Raised when SINGLE_CHOISE_QUESTION hasn't at least 1 correct answers."""
 
     pass
 
@@ -42,5 +42,11 @@ class NotAtLeastThreeNumberOfOptions(Svg2GakkoError):
 
 class AnswersAreNotUnique(Svg2GakkoError):
     """Raised when there are non-unique answers."""
+
+    pass
+
+
+class SvgMetadataNotFoundError(Svg2GakkoError):
+    """Raised when SVG file does not contain the expected metadata pattern ({category}::{question}::{type})."""
 
     pass

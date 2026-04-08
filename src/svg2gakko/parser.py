@@ -4,7 +4,7 @@ from io import BytesIO
 from pathlib import Path
 import cairosvg
 from PIL import Image
-from svg2gakko.constants import TEMP_DIR
+from svg2gakko.constants import TEMP_DIR_PARSER
 
 
 def _svg2jpeg(file: Path) -> Path:
@@ -17,7 +17,7 @@ def _svg2jpeg(file: Path) -> Path:
         Path: Path to the converted JPEG image inside TEMP directory
     """
     jpeg_name = os.path.splitext(file.name)[0] + ".jpeg"
-    jpeg_path = TEMP_DIR / jpeg_name
+    jpeg_path = TEMP_DIR_PARSER / jpeg_name
 
     png_data = cairosvg.svg2png(url=str(file))
 

@@ -1,9 +1,9 @@
 from svg2gakko.parser import svg2base64gakko
+from svg2gakko.constants import get_data_from_svg
 from rich import print
 from pathlib import Path
 from typing import List, Literal
 from svg2gakko.question import Question, QuestionType, Answer
-
 
 class CategoryProcessor:
     @classmethod
@@ -23,14 +23,12 @@ class CategoryProcessor:
             question = Question(
                 content=svg2base64gakko(question_path),
                 # TODO How do we read QuestionType from the file?
-                question_type=QuestionType.SINGLE_CHOICE_QUESTION,
+                question_type=QuestionType.MULTIPLE_CHOICE_QUESTION,
             )
-
             answers = [
                 Answer(
                     svg2base64gakko(file),
-                    # TODO How do we check if answer is correct?
-                    True,
+                    True if get_data_from_svg(file)[-1] == "+" else False
                 )
                 for file in answers_paths
             ]

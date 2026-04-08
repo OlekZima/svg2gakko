@@ -1,6 +1,7 @@
 from svg2gakko.json_builder import JSONBuilder
 from svg2gakko.processor import CategoryProcessor
 from svg2gakko.scanner import CategoryScanner
+from svg2gakko.input_parser import InputParser
 from svg2gakko.builder import Builder
 from svg2gakko.errors import (
     InputDirectoryDoesntExistError,
@@ -26,6 +27,8 @@ def _parse_args() -> argparse.Namespace:
         "output",
         help="Output JSON file path.",
         type=str,
+        nargs="?",
+        default=None,
     )
 
     parser.add_argument(
@@ -41,6 +44,16 @@ def _parse_args() -> argparse.Namespace:
         help="Output JSON file path.",
         type=str,
     )
+
+    parser.add_argument(
+        "-r",
+        "--reorganize",
+        help="Reorganize the input directory in-place with correct file structure and naming convention. "
+        "SVG files are renamed and moved into category directories based on their metadata. "
+        "When this flag is set, no JSON output is produced and the output argument is not required.",
+        action="store_true",
+    )
+
     return parser.parse_args()
 
 
@@ -57,8 +70,20 @@ def main() -> None:
     args = _parse_args()
     _check_input(args.input)
 
-    Builder(
+    builder = Builder(
         CategoryScanner(),
         CategoryProcessor(),
         JSONBuilder(),
-    ).build(args.input, args.output)
+        InputParser(),
+    )
+
+    if args.reorganize:
+        builder.reorganize(args.input)
+    else:
+        if args.output is None:
+            raise argparse.ArgumentError(
+                None,
+                "the following argument is required: output "
+                "(not needed when --reorganize is set)",
+            )
+        builder.build(args.input, args.output)
