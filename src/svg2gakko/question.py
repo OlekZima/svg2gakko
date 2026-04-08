@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Iterable, Optional
 from svg2gakko.errors import (
     NotAtLeastTwoAnswersError,
     NotAtLeastOneCorrectAnswersError,
@@ -37,6 +37,7 @@ class Question:
     _answers: list[Answer] = field(default_factory=list)
     number_of_options: int = 3
     points: int = 1
+    category: Optional[int] = None
 
     def is_correct(self) -> bool:
         if self.number_of_options < 3:
