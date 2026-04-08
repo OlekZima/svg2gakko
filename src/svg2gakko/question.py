@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Iterable, Optional
 from svg2gakko.errors import (
     NotAtLeastTwoAnswersError,
     NotAtLeastOneCorrectAnswersError,
@@ -37,6 +37,7 @@ class Question:
     _answers: list[Answer] = field(default_factory=list)
     number_of_options: int = 3
     points: int = 1
+    category: Optional[int] = None
 
     def is_correct(self) -> bool:
         if self.number_of_options < 3:
@@ -50,11 +51,11 @@ class Question:
         if self.question_type.value in (0, 1):
             if len(self._answers) < 2:
                 raise NotAtLeastTwoAnswersError(
-                    f"For MULTIPLE/SINGLE_CHOICE_QUESTION you need at least 2 answers.\n{self}"
+                    f"For SINGLE/MULTIPLE_CHOICE_QUESTION you need at least 2 answers.\n{self}"
                 )
-            if not any(answer.correct for answer in self._answers):
+            if self.question_type.value == 0 and not any(answer.correct for answer in self._answers):
                 raise NotAtLeastOneCorrectAnswersError(
-                    f"For MULTIPLE/SINGLE_CHOICE_QUESTION at least 1 answer should be correct.\n{self}"
+                    f"For SINGLE_CHOICE_QUESTION at least 1 answer should be correct.\n{self}"
                 )
         else:
             if not all(answer.correct for answer in self._answers):

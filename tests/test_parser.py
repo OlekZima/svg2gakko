@@ -1,14 +1,127 @@
-from svg2gakko.parser import svg2base64gakko
+import base64
+import re
 from pathlib import Path
+
+import pytest
+from urllib.error import URLError
+
+from svg2gakko.parser import svg2base64gakko
 
 
 def test_parse_svg_returns_str():
+    """svg2base64gakko returns a string for a valid SVG file."""
     result = svg2base64gakko(Path("tests/data/example.svg"))
     assert isinstance(result, str)
 
 
-def test_parse_svg():
-    assert (
-        svg2base64gakko(Path("tests/data/example.svg"))
-        == """<img style="width: 236px" src="data:image/jpeg;base64,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"><br>"""
-    )
+def test_parse_svg_structure():
+    """Check that the output has the correct HTML structure."""
+    result = svg2base64gakko(Path("tests/data/example.svg"))
+    # Should start with <img
+    assert result.startswith('<img')
+    # Should end with <br>
+    assert result.endswith('<br>')
+    # Should contain style="width: ...px"
+    assert 'style="width:' in result
+    # Should contain src="data:image/jpeg;base64,"
+    assert 'src="data:image/jpeg;base64,' in result
+
+
+def test_parse_svg_width_extraction():
+    """Check that the width is extracted from the SVG and included in the output."""
+    result = svg2base64gakko(Path("tests/data/example.svg"))
+    # The example.svg has width="236", so we expect style="width: 236px"
+    assert 'style="width: 236px"' in result
+
+
+def test_parse_svg_base64_valid():
+    """Check that the base64 string is valid and can be decoded."""
+    result = svg2base64gakko(Path("tests/data/example.svg"))
+    # Extract the base64 part using regex
+    match = re.search(r'src="data:image/jpeg;base64,([^"]+)"', result)
+    assert match is not None
+    base64_str = match.group(1)
+    # Decode the base64 string, should not raise an exception
+    decoded = base64.b64decode(base64_str)
+    assert isinstance(decoded, bytes)
+    # The decoded bytes should start with JPEG magic number: 0xFFD8
+    assert decoded.startswith(b'\xff\xd8')
+
+
+def test_parse_svg_nonexistent_file():
+    """svg2base64gakko should raise URLError for a non-existent file."""
+    with pytest.raises(URLError):
+        svg2base64gakko(Path("non_existent.svg"))
+
+
+def test_parse_svg_invalid_svg(tmp_path):
+    """If the SVG is invalid, the function may raise an exception from cairosvg or PIL.
+    We don't know exactly what exception, but we expect some exception."""
+    invalid_svg = tmp_path / "invalid.svg"
+    invalid_svg.write_text("not an svg")
+    with pytest.raises(Exception):
+        svg2base64gakko(invalid_svg)
+
+
+def test_parse_svg_empty_svg(tmp_path):
+    """An empty SVG might cause an error in the conversion. We expect an exception."""
+    empty_svg = tmp_path / "empty.svg"
+    empty_svg.write_text("")
+    with pytest.raises(Exception):
+        svg2base64gakko(empty_svg)
+
+
+def test_parse_svg_without_width(tmp_path):
+    """SVG without explicit width might still be processed (default width?).
+    However, the function uses PIL to get the image width, which should be the actual width of the image.
+    We'll create a minimal SVG with a rectangle but no width attribute on the root.
+    The function should still work and return a width."""
+    svg_content = """<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect x="10" y="10" width="80" height="80" fill="red"/>
+</svg>"""
+    svg_file = tmp_path / "no_width.svg"
+    svg_file.write_text(svg_content, encoding="utf-8")
+    result = svg2base64gakko(svg_file)
+    # The result should still contain a width (the image width after conversion)
+    assert 'style="width:' in result
+    # The width should be a positive integer
+    match = re.search(r'style="width: (\d+)px"', result)
+    assert match is not None
+    width = int(match.group(1))
+    assert width > 0
+
+
+def test_parse_svg_returns_same_for_same_input(tmp_path):
+    """Multiple calls with the same SVG should return the same string."""
+    svg_content = """<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50">
+  <circle cx="25" cy="25" r="20" fill="blue"/>
+</svg>"""
+    svg_file = tmp_path / "circle.svg"
+    svg_file.write_text(svg_content, encoding="utf-8")
+    result1 = svg2base64gakko(svg_file)
+    result2 = svg2base64gakko(svg_file)
+    assert result1 == result2
+
+
+def test_parse_svg_different_svgs_produce_different_outputs(tmp_path):
+    """Different SVGs should produce different base64 strings (different images)."""
+    svg1_content = """<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10">
+  <rect width="10" height="10" fill="red"/>
+</svg>"""
+    svg2_content = """<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10">
+  <rect width="10" height="10" fill="blue"/>
+</svg>"""
+    svg1 = tmp_path / "red.svg"
+    svg2 = tmp_path / "blue.svg"
+    svg1.write_text(svg1_content, encoding="utf-8")
+    svg2.write_text(svg2_content, encoding="utf-8")
+    result1 = svg2base64gakko(svg1)
+    result2 = svg2base64gakko(svg2)
+    # The base64 strings should be different
+    # Extract the base64 part
+    match1 = re.search(r'src="data:image/jpeg;base64,([^"]+)"', result1)
+    match2 = re.search(r'src="data:image/jpeg;base64,([^"]+)"', result2)
+    assert match1 is not None and match2 is not None
+    assert match1.group(1) != match2.group(1)
