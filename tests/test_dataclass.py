@@ -38,7 +38,7 @@ class TestAnswer:
     def test_frozen(self):
         answer = Answer("A", True)
         with pytest.raises(AttributeError):
-            answer.content = "B"
+            answer.content = "B"  # ty:ignore[invalid-assignment]
 
 
 
