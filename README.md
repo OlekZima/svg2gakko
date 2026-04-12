@@ -42,7 +42,7 @@ uv run main.py input output
 Run the CLI tool:
 
 ```txt
-usage: svg2gakko [-h] [-i INPUT] [-o OUTPUT] input output
+usage: svg2gakko [-h] [-i INPUT] [-o OUTPUT] [-r] input [output]
 
 Tool for conversion svg images to Gakko's JSON test format
 
@@ -54,6 +54,9 @@ options:
   -h, --help           show this help message and exit
   -i, --input INPUT    Directory which will contain other directories (categories of questions) with SVG files.
   -o, --output OUTPUT  Output JSON file path.
+  -r, --reorganize     Reorganize the input directory in-place with correct file structure and naming convention. SVG files are renamed and moved into
+                       category directories based on their metadata. When this flag is set, no JSON output is produced and the output argument is not
+                       required.
 ```
 
 - `-i, --input`: Path to the directory containing question categories (each as a subdirectory with SVG files).
@@ -62,9 +65,7 @@ options:
 
 ## Troubleshoting
 
-As the `input`, pass a path to a directory that contains subdirectories with SVG files.
-
-Each subdirectory represents either a **question category** or a **single question**.
+As the `input`, pass a path to a directory that contains SVG files. Any hierarchy of files/directories is allowed.
 
 As the `output`, provide a path to the JSON file that will be created (if it doesn’t exist) and filled with data.
 
@@ -75,46 +76,4 @@ As the `output`, provide a path to the JSON file that will be created (if it doe
 
 ### Note
 
-1. A question file (e.g. `1.svg`), will be used as the question content.
-2. Answer files should named in the format `QuestionNumber_AnswerNumber.svg`.
-    Each question must have at least two answers, unless its `QuestionType` is `TEXT_QUESTION`.
-3. Contents of answers must be unique.
-
-### Example file structure #1
-
-```txt
-data/
-    category_1/
-        1.svg
-        1_1.svg
-        1_2.svg
-        2.svg
-        2_1.svg
-        2_2.svg
-        2_3.svg
-    category_2/
-        3.svg
-        3_1.svg
-        3_2.svg
-```
-
-### Example file structure #2
-
-```txt
-questions/
-    question_1/
-        1.svg
-        1_1.svg
-        1_2.svg
-    question_2/
-        2.svg
-        2_1.svg
-        2_2.svg
-        2_3.svg
-    question_3/
-        3.svg
-        3_1.svg
-        3_2.svg
-        3_3.svg
-        3_4.svg
-```
+- Contents of answers must be unique within the question.
