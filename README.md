@@ -1,4 +1,4 @@
-# svg2gakko [Work In Progress]
+# svg2gakko
 
 ## Convert your SVG images into Gakko Test JSON format
 
