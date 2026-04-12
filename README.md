@@ -3,7 +3,7 @@
 ## Convert your SVG images into Gakko Test JSON format
 
 > [!CAUTION]
-> At the moment all answers are *correct* by default and all questions are `SINGLE_CHOICE_QUESTION` type.
+> At the moment all questions are `MULTIPLE_CHOICE_QUESTION` type.
 
 ### Installation
 
